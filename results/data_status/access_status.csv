@@ -1,0 +1,12 @@
+dataset,role,status,provider,message,checked_at_utc
+fred_DGS10,core,user_provided,local_file,/Users/oltimyrtaj/Desktop/erdos quant project 2/agency-mbs-hedging/data/local_inputs/DGS10.csv,2026-11-03T02:30:43Z
+fred_DGS5,robustness,user_provided,local_file,/Users/oltimyrtaj/Desktop/erdos quant project 2/agency-mbs-hedging/data/local_inputs/DGS5.csv,2026-11-03T02:30:43Z
+fred_DGS2,descriptive,unavailable,,fred_graph_csv: GET https://fred.stlouisfed.org/graph/fredgraph.csv skipped: fred.stlouisfed.org did not answer earlier in this run | fred_graph_csv_curl: curl https://fred.stlouisfed.org/graph/fredgraph.csv failed (exit 92): curl: (92) HTTP/2 stream 1 was not closed cleanly: INTERNAL_ERROR (err 2),2026-11-03T02:30:44Z
+fred_DGS3MO,core,user_provided,local_file,/Users/oltimyrtaj/Desktop/erdos quant project 2/agency-mbs-hedging/data/local_inputs/DGS3MO.csv,2026-11-03T02:30:44Z
+fred_MORTGAGE30US,core,user_provided,local_file,/Users/oltimyrtaj/Desktop/erdos quant project 2/agency-mbs-hedging/data/local_inputs/MORTGAGE30US.csv,2026-11-03T02:30:44Z
+fhfa_nmdb_outstanding_national_census,core,verified_access,fhfa_zip,"7992 national rows, 2013Q1 to 2026Q2",2026-11-03T02:30:45Z
+prices_MBB,core,verified_access,yfinance,4940 rows 2007-03-16 to 2026-11-02,2026-11-03T02:30:46Z
+prices_VMBS,core_external,verified_access,yfinance,4261 rows 2009-11-23 to 2026-11-02,2026-11-03T02:30:47Z
+prices_PMBS,extension,verified_access,yfinance,530 rows 2024-09-23 to 2026-11-02,2026-11-03T02:30:47Z
+prices_PDMIX,pimco_external,verified_access,yfinance,5241 rows 2006-01-03 to 2026-11-02,2026-11-03T02:30:47Z
+doc_nmdb_dictionary,documentation,verified_access,http,https://www.fhfa.gov/document/d/nmdb/nmdb-aggregate-statistics-data-dictionary-technical-notes-2026q1.pdf,2026-11-03T02:30:48Z

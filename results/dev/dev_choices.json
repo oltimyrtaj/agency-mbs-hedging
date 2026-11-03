@@ -1,0 +1,66 @@
+{
+  "static_duration_years": 2.699276539646421,
+  "ewma_halflife_days": 21,
+  "halflife_selection": [
+    {
+      "halflife_days": 5,
+      "dev_vol_gross_ann_pct": 1.6252138398,
+      "dev_cost_bp_per_year": 2.3201867943,
+      "objective_bp": 83.5808787835,
+      "dev_turnover_per_year": 1.1600933972
+    },
+    {
+      "halflife_days": 10,
+      "dev_vol_gross_ann_pct": 1.5857230331,
+      "dev_cost_bp_per_year": 1.75218712,
+      "objective_bp": 81.0383387759,
+      "dev_turnover_per_year": 0.87609356
+    },
+    {
+      "halflife_days": 21,
+      "dev_vol_gross_ann_pct": 1.5937905413,
+      "dev_cost_bp_per_year": 1.2382791458,
+      "objective_bp": 80.9278062105,
+      "dev_turnover_per_year": 0.6191395729
+    },
+    {
+      "halflife_days": 42,
+      "dev_vol_gross_ann_pct": 1.6580848022,
+      "dev_cost_bp_per_year": 0.9142897711,
+      "objective_bp": 83.8185298794,
+      "dev_turnover_per_year": 0.4571448856
+    },
+    {
+      "halflife_days": 63,
+      "dev_vol_gross_ann_pct": 1.7161806585,
+      "dev_cost_bp_per_year": 0.7625557166,
+      "objective_bp": 86.5715886396,
+      "dev_turnover_per_year": 0.3812778583
+    },
+    {
+      "halflife_days": 126,
+      "dev_vol_gross_ann_pct": 1.8166052469,
+      "dev_cost_bp_per_year": 0.5521113207,
+      "objective_bp": 91.3823736653,
+      "dev_turnover_per_year": 0.2760556603
+    },
+    {
+      "halflife_days": 252,
+      "dev_vol_gross_ann_pct": 1.8881957266,
+      "dev_cost_bp_per_year": 0.4131440177,
+      "objective_bp": 94.8229303452,
+      "dev_turnover_per_year": 0.2065720088
+    }
+  ],
+  "proxy_halflife_years": 2,
+  "proxy_offset_pp": 0.028826363309167213,
+  "sigma_pp": 1.2,
+  "theta_pp": 0.5,
+  "nmdb_markets": [
+    "Enterprise Acquisitions",
+    "Government / Non-Conventional"
+  ],
+  "nmdb_lag_quarters": 1,
+  "first_dev_decision": "2010-03",
+  "first_test_decision": "2014-12"
+}

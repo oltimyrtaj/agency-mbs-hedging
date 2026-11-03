@@ -1,0 +1,16 @@
+# Flexible requirements: tested on Python 3.11 (older pins) and Python 3.13 (latest pins).
+# For the exact tested set use requirements-lock.txt (Python 3.13).
+numpy>=1.26,<2.6
+pandas>=2.2,<3.1
+scipy>=1.11,<1.19
+statsmodels>=0.14.4,<0.16
+matplotlib>=3.9,<3.12        # matplotlib < 3.9 fails with IPython >= 9 (backend2gui import error)
+pyarrow>=15,<27
+PyYAML>=6.0,<7
+requests>=2.31,<3
+yfinance>=0.2.54             # optional: the Yahoo chart API and local files are fallbacks
+nbformat>=5.10,<6
+nbclient>=0.10,<0.12
+ipykernel>=6.30
+pytest>=8.3
+# To open the notebooks interactively, also install: jupyterlab

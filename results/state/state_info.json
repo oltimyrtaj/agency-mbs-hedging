@@ -1,0 +1,68 @@
+{
+  "markets": [
+    "Enterprise Acquisitions",
+    "Government / Non-Conventional"
+  ],
+  "lag_quarters": 1,
+  "theta_pp": 0.5,
+  "proxy": {
+    "status": "ok",
+    "halflife_years": 2,
+    "offset": 0.028826363309167213,
+    "rmse_pp": 0.024077843737221626,
+    "n_quarters": 7,
+    "calibration_quarters": [
+      "2013-03-31",
+      "2013-06-30",
+      "2013-09-30",
+      "2013-12-31",
+      "2014-03-31",
+      "2014-06-30",
+      "2014-09-30"
+    ],
+    "grid": [
+      {
+        "halflife_years": 1,
+        "offset_pp": 0.4593704233191406,
+        "rmse_pp": 0.11415589545131104
+      },
+      {
+        "halflife_years": 1.5,
+        "offset_pp": 0.2437179558750688,
+        "rmse_pp": 0.05078854788070124
+      },
+      {
+        "halflife_years": 2,
+        "offset_pp": 0.028826363309167213,
+        "rmse_pp": 0.024077843737221626
+      },
+      {
+        "halflife_years": 3,
+        "offset_pp": -0.3650927451257178,
+        "rmse_pp": 0.02517243662715328
+      },
+      {
+        "halflife_years": 4,
+        "offset_pp": -0.7255311934816912,
+        "rmse_pp": 0.03374238596566978
+      },
+      {
+        "halflife_years": 5,
+        "offset_pp": -1.0587058890482546,
+        "rmse_pp": 0.038114790438685736
+      },
+      {
+        "halflife_years": 6,
+        "offset_pp": -1.3604103100695935,
+        "rmse_pp": 0.039625520186909576
+      },
+      {
+        "halflife_years": 8,
+        "offset_pp": -1.8588095826655344,
+        "rmse_pp": 0.037839287690356146
+      }
+    ]
+  },
+  "sigma_source": "NMDB rate buckets, 7 quarters available by 2014-12-31",
+  "sigma_pp": 1.2
+}

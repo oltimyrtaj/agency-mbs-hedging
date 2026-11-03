@@ -1,0 +1,11 @@
+{
+  "months": 93,
+  "mean_lead_years": 0.043852787909169834,
+  "mean_lead_se": 0.06610786041116033,
+  "mean_lag_years": 0.044214793253251145,
+  "mean_lag_se": 0.06519310592446183,
+  "mean_duration_lag_only": 2.699276539646421,
+  "mean_change_when_lead_added": 0.015774989361234323,
+  "mean_change_se": 0.07777992135388091,
+  "change_share_of_duration": 0.005844154583472464
+}

@@ -1,0 +1,28 @@
+# Third-party data stays out of the public repository (Yahoo terms, Freddie Mac PMMS copyright).
+# The raw manifest keeps hashes and sources so anyone can rebuild and verify the files.
+data/raw/**
+!data/raw/manifest.csv
+data/interim/
+data/processed/
+data/local_inputs/*
+!data/local_inputs/README.md
+# Daily ledgers contain return series derived from third-party prices
+results/backtest/ledger_*.parquet
+results/backtest/weekly_*.parquet
+# Run artifacts
+outputs/
+return_bundle/
+executed_notebooks/
+logs/
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+*.pyc
+.env
+.DS_Store
+~$*
+
+# Kept local: the author's Fall 2025 project files, used only as templates for the communication stage
+communication/templates_2025/
+# This figure's data file holds Freddie Mac PMMS values, which are copyrighted. The figure itself is published.
+reports/figures/data/02_incentive_inputs.csv

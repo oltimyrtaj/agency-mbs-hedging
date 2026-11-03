@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mbshedge"
+version = "1.0.0"
+description = "Dynamic Treasury hedging of Agency MBS: research code for the Erdos Institute Fall 2026 project"
+requires-python = ">=3.11"
+authors = [{ name = "Olti Myrtaj" }]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,17 @@
+column,description,units,source,observation_date,availability
+date,Trading date: MBB close and 10-year yield both observed,date,"Yahoo, FRED",this date,close of this date
+days,Calendar days since the previous trading date,days,derived,this date,close
+tr_mbb,"MBB total return since the previous trading date, (close + distribution) / previous close - 1, compounded over skipped days",decimal,Yahoo closes and distributions,this date,close
+rf,3-month bill accrual over the interval: DGS3MO(previous date) / 100 * days / 365,decimal,FRED DGS3MO,previous date,close
+r_mbb_ex,MBB excess return: tr_mbb - rf,decimal,derived,this date,close
+"y10, y5, y2, y3m",Treasury constant-maturity yields,percent,FRED H.15,this date,market-observable at close
+"dy10, dy5",Change in the 10-year (5-year) yield since the previous trading date,decimal (0.0001 = 1 bp),derived,this date,close
+"r_h10, r_h5",Total return of the daily-reset synthetic 10-year (5-year) par Treasury,decimal,derived from FRED yields,this date,close
+"r_h10_ex, r_h5_ex",Hedge-bond excess return over the bill accrual,decimal,derived,this date,close
+"dur_h10, dur_h5",Modified duration of a new par bond at the close,years,derived,this date,close
+"tr_vmbs, r_vmbs_ex, tr_pmbs, r_pmbs_ex, tr_pdmix, r_pdmix_ex","Same construction for VMBS, PMBS, and PIMCO's GNMA fund PDMIX (missing before inception). PDMIX is a mutual fund, so its close is the daily NAV",decimal,Yahoo,this date,close (NAV struck at 4 pm ET for PDMIX)
+pmms,Latest Freddie Mac PMMS 30-year rate released on or before this date,percent,FRED MORTGAGE30US,pmms_release_date,"Thursday release (12:00 ET), usable at that close"
+stock_rate,Average note rate on outstanding agency-eligible mortgages (UPB-weighted),percent,"FHFA NMDB, or the PMMS proxy before NMDB is available",stock_rate_quarter_end,stock_rate_available_from
+incentive,Refinancing incentive: stock_rate - pmms,percentage points,derived,this date,max of input availability dates
+g,Share of borrowers in the money: Phi((incentive - theta) / sigma),fraction 0 to 1,derived,this date,as incentive
+incentive_source,"nmdb, or proxy_retrospective when the proxy (calibrated with 2013-2014 data) is used",label,derived,this date,n/a

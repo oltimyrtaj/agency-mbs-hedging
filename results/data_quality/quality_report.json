@@ -1,0 +1,95 @@
+{
+  "prices_MBB": {
+    "rows": 4940,
+    "duplicates_dropped": 0,
+    "n_distributions": 227,
+    "first_date": "2007-03-16",
+    "last_date": "2026-11-02",
+    "adjclose_check_days_compared": 4939,
+    "adjclose_check_max_abs_diff_bp": 1.3581658569861155,
+    "adjclose_check_days_over_1bp": 1,
+    "adjclose_check_dates_over_1bp": [
+      "2010-12-01"
+    ],
+    "adjclose_check_cum_diff_bp_per_year": 0.028791227285651068,
+    "days_abs_return_over_3pct": 2
+  },
+  "calendar": {
+    "n_dates": 4902,
+    "first": "2007-03-16",
+    "last": "2026-10-30",
+    "MBB_days_not_in_calendar": 38,
+    "DGS10_days_not_in_calendar": 9
+  },
+  "prices_VMBS": {
+    "rows": 4261,
+    "duplicates_dropped": 0,
+    "n_distributions": 203,
+    "first_date": "2009-11-23",
+    "last_date": "2026-11-02",
+    "adjclose_check_days_compared": 4260,
+    "adjclose_check_max_abs_diff_bp": 0.4296646735646448,
+    "adjclose_check_days_over_1bp": 0,
+    "adjclose_check_dates_over_1bp": [],
+    "adjclose_check_cum_diff_bp_per_year": -0.06533871522034938,
+    "days_abs_return_over_3pct": 3
+  },
+  "prices_PMBS": {
+    "rows": 530,
+    "duplicates_dropped": 0,
+    "n_distributions": 24,
+    "first_date": "2024-09-23",
+    "last_date": "2026-11-02",
+    "adjclose_check_days_compared": 529,
+    "adjclose_check_max_abs_diff_bp": 0.3946265371213009,
+    "adjclose_check_days_over_1bp": 0,
+    "adjclose_check_dates_over_1bp": [],
+    "adjclose_check_cum_diff_bp_per_year": 0.15504268997282533,
+    "days_abs_return_over_3pct": 0
+  },
+  "prices_PDMIX": {
+    "rows": 5241,
+    "duplicates_dropped": 0,
+    "n_distributions": 268,
+    "first_date": "2006-01-03",
+    "last_date": "2026-11-02",
+    "adjclose_check_days_compared": 5240,
+    "adjclose_check_max_abs_diff_bp": 0.9230805920812379,
+    "adjclose_check_days_over_1bp": 0,
+    "adjclose_check_dates_over_1bp": [],
+    "adjclose_check_cum_diff_bp_per_year": -1.1698885580050542,
+    "days_abs_return_over_3pct": 0
+  },
+  "missing_counts": {
+    "days": 0,
+    "tr_mbb": 0,
+    "y10": 0,
+    "y3m": 0,
+    "y5": 0,
+    "rf": 0,
+    "r_mbb_ex": 0,
+    "dy10": 0,
+    "r_h10": 0,
+    "r_h10_ex": 0,
+    "dur_h10": 0,
+    "r_h5": 0,
+    "r_h5_ex": 0,
+    "dur_h5": 0,
+    "dy5": 0,
+    "tr_vmbs": 673,
+    "r_vmbs_ex": 673,
+    "tr_pmbs": 4378,
+    "r_pmbs_ex": 4378,
+    "tr_pdmix": 0,
+    "r_pdmix_ex": 0
+  },
+  "timing_checks": {
+    "PMMS release date never after the row date": true,
+    "NMDB availability never after the row date": true,
+    "NMDB quarter end at least one quarter before use": true,
+    "no duplicate trading dates": true,
+    "calendar strictly increasing": true,
+    "no missing MBB excess returns": true,
+    "no missing 10-year hedge returns": true
+  }
+}

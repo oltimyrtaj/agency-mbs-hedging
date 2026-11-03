@@ -1,0 +1,197 @@
+# =====================================================================
+# Agency MBS dynamic hedging project: single configuration file
+# ---------------------------------------------------------------------
+# Every path, date, seed, data source, and experiment choice lives here.
+# The `experiment` block is FROZEN by notebook 06 before any test-period
+# evaluation. Changing it afterwards is a logged post-freeze change
+# (see docs/experiment_freeze.md).
+# =====================================================================
+
+project:
+  name: agency-mbs-dynamic-hedging
+  version: "1.0.0"
+  # Run mode when a notebook is opened interactively.
+  # smoke       = synthetic data, fast, outputs under outputs/smoke/
+  # development = real data, stops at the experiment freeze
+  # full        = real data, freeze then test-period evaluation
+  default_mode: full
+
+paths:
+  # All paths are relative to the project root (the folder holding this config/ dir).
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  local_inputs: data/local_inputs        # optional user-supplied files (see docs/data_sources.md)
+  results: results
+  figures: reports/figures
+  tables: reports/tables
+  bundle: return_bundle
+  smoke_root: outputs/smoke              # every smoke-run output goes under here
+
+network:
+  connect_timeout_seconds: 10   # seconds to open a connection
+  timeout_seconds: 20           # seconds to wait for the next bytes of a reply
+  max_retries: 2                # a server that times out on every try is skipped for the rest of the run
+  backoff_seconds: 2.0
+  curl_max_seconds: 45          # whole-request limit for the curl fallback
+  user_agent: "Mozilla/5.0 (compatible; mbs-hedging-research/1.0)"
+  # Optional credentials are read from environment variables only:
+  #   FRED_API_KEY (optional FRED API route), TIINGO_API_KEY (optional price fallback)
+
+data:
+  start_date: "2006-01-01"     # first date requested from providers (yields need a lead-in)
+  end_date: null               # null = today
+  refresh: false               # true = re-download even when a cached raw file exists
+
+  fred_series:
+    DGS10: {description: "10-year Treasury constant-maturity yield", role: core}
+    DGS5: {description: "5-year Treasury constant-maturity yield", role: robustness}
+    DGS2: {description: "2-year Treasury constant-maturity yield", role: descriptive}
+    DGS3MO: {description: "3-month Treasury constant-maturity yield (bill financing rate)", role: core}
+    MORTGAGE30US: {description: "Freddie Mac PMMS 30-year fixed rate", role: core, start: "1971-04-01"}   # full history warms up the pre-2013 proxy
+
+  price_tickers:
+    MBB: {description: "iShares MBS ETF (primary portfolio proxy)", role: core, first_trade: "2007-03-16"}
+    VMBS: {description: "Vanguard Mortgage-Backed Securities ETF (external validation)", role: core_external, first_trade: "2009-11-23"}
+    PMBS: {description: "PIMCO Mortgage-Backed Securities Active ETF (descriptive extension)", role: extension, first_trade: "2024-09-23"}
+    PDMIX: {description: "PIMCO GNMA and Government Securities Fund, Institutional class (PIMCO held-out test, daily NAV)", role: pimco_external, first_trade: "1997-07-31"}
+  price_providers: [yfinance, yahoo_chart, tiingo, local]   # tried in this order
+
+  nmdb:
+    page_url: "https://www.fhfa.gov/data/nmdb"
+    zip_url: "https://www.fhfa.gov/document/d/nmdb/nmdb-outstanding-mortgage-statistics-national-census-areas-quarterly.zip"
+    dictionary_url: "https://www.fhfa.gov/document/d/nmdb/nmdb-aggregate-statistics-data-dictionary-technical-notes-2026q1.pdf"
+    geolevel: National
+    # Agency-eligible stock = Enterprise Acquisitions + Government / Non-Conventional,
+    # combined by total unpaid balance (TOT_UPB). Robustness uses All Mortgages.
+    markets_core: ["Enterprise Acquisitions", "Government / Non-Conventional"]
+    market_robustness: "All Mortgages"
+    value_column: VALUE2       # VALUE2 = weighted by unpaid principal balance (VALUE1 = by loan count)
+
+  pmms_xlsx_url: "https://www.freddiemac.com/pmms/docs/historicalweeklydata.xlsx"   # optional cross-check only
+
+  # Present-day sanity check only (a model-based effective duration, not an input to any model).
+  ishares_mbb_reference: {effective_duration_years: 5.71, weighted_avg_coupon_pct: 3.64, oas_bp: 30.28,
+                          as_of: "2026-10-29", source: "iShares MBB product page, read 2026-11-02"}
+
+  # PIMCO Mortgage-Backed Securities Fund before its 2024 ETF conversion (PTRIX): NOT available
+  # from Yahoo (verified 2026-11-02). Supply its daily NAV as data/local_inputs/pimco_ptrix_nav.csv
+  # (tools/convert_pimco_nav.py builds that file from a CRSP, Bloomberg, or PIMCO export).
+  # PIMCO's GNMA fund (PDMIX) is on Yahoo with daily NAV since 1997 (verified 2026-11-02).
+  pimco_local_file: pimco_ptrix_nav.csv
+
+timing:
+  # Daily market data (yields, ETF closes) are treated as known at that day's close.
+  # PMMS: FRED dates each value by its Thursday release (12:00 ET), so it is usable at that day's close.
+  pmms_release_lag_days: 0
+  # NMDB: a quarter's values become usable at the end of the FOLLOWING quarter
+  # (2026Q2 was published 2026-09-30). The series was published long after 2013,
+  # so this is an availability approximation, not a true real-time vintage.
+  nmdb_lag_quarters: 1
+  nmdb_lag_quarters_robustness: 2
+
+experiment:
+  # ---------------- FROZEN BLOCK (hashed by the freeze record) ----------------
+  hedge_tenor_years: 10            # synthetic constant-maturity par Treasury
+  hedge_tenor_robustness: 5
+  rate_factor_series: DGS10        # yield whose changes define empirical duration
+  notional_usd: 100000000          # MBS notional for dollar reporting ($100mm)
+
+  sample:
+    first_month: "2007-04"         # first full month of MBB trading
+    min_training_months: 36        # walk-forward burn-in for fitted models
+    development_end: "2014-12"     # last target month of the development period
+    test_start: "2015-01"          # first target month of the final test period
+    test_end: null                 # null = last complete month in the data
+
+  exposure:
+    min_days_per_month: 15
+    dimson_lags: 1                 # Delta y_t and Delta y_{t-1}
+    newey_west_lags: 2
+    ewma_halflife_grid_days: [5, 10, 21, 42, 63, 126, 252]   # chosen on development data (5 and 10 added 2026-11-02, see decision 24)
+    max_abs_duration_flag: 12.0    # monthly estimates beyond this are flagged unavailable
+    q_bootstrap_reps: 1000         # constant-duration residual bootstrap for the variation test
+    q_bootstrap_block_days: 5
+
+  incentive:
+    refi_threshold_pp: 0.5         # theta: savings needed to refinance (fixed a priori)
+    dispersion_default_pp: 1.0     # sigma fallback if NMDB rate buckets are unavailable
+    dispersion_robustness_scale: [0.5, 1.5]
+    proxy_halflife_grid_years: [1, 1.5, 2, 3, 4, 5, 6, 8]   # pre-NMDB stock-rate proxy (development only; 1 and 1.5 added 2026-11-02)
+
+  models:
+    # S static, U updating (EWMA), P persistence, AR autoregressive, E economic state, H hybrid,
+    # X ex-post diagnostic (infeasible: uses next month's realized exposure)
+    list: [S, U, P, AR, E, H, X]
+    headline_challenger: H
+    primary_comparisons:           # challenger vs comparator, one-sided "challenger has lower variance"
+      - [H, U]
+      - [E, U]
+      - [U, S]
+      - [H, S]
+
+  hedging:
+    rebalance_rules: [monthly, quarterly, band_0.10, band_0.25, band_0.50]
+    base_rule: monthly
+    execution_delay_days: [0, 1, 5]   # trading days after the decision close
+    base_delay_days: 1
+    cost_grid_bp: [0, 1, 2, 5, 10]    # one-way cost per unit of hedge notional traded
+    base_cost_bp: 2
+    financing_spread_bp_per_year: 0   # short-proceeds financing below the bill rate (sensitivity: 10)
+    financing_spread_sensitivity_bp: 10
+    max_hedge_ratio: 1.5              # position limit, hedge notional per $1 of MBS (hits are logged)
+
+  evaluation:
+    frequency: weekly                 # Friday-ending weeks
+    min_days_per_week: 3
+    bootstrap_reps: 2000
+    bootstrap_block_weeks: 13
+    bootstrap_block_robustness: [4, 26]
+    confidence: 0.95
+    hac_lags_weekly: 4
+    hac_lags_monthly: 3
+    # "Survives costs": value residual-risk reduction at a hurdle information ratio
+    hurdle_information_ratio: 0.5
+    practical_variance_reduction_vs_U: 0.05
+    practical_variance_reduction_vs_S: 0.10
+    regimes:
+      locked_in_below_pp: -0.5
+      refinanceable_above_pp: 0.5
+    excluded_window_robustness: ["2020-03-01", "2020-04-30"]
+
+  episodes:
+    # Windows are fixed here before any test-period evaluation.
+    - {name: "2008 crisis", start: "2008-09-01", end: "2009-03-31", period: development}
+    - {name: "2012 refinancing wave", start: "2012-07-01", end: "2012-12-31", period: development}
+    - {name: "2013 taper tantrum", start: "2013-05-01", end: "2013-09-30", period: development}
+    - {name: "2016 election selloff", start: "2016-10-01", end: "2016-12-31", period: test}
+    - {name: "2019 rally", start: "2019-03-01", end: "2019-09-30", period: test}
+    - {name: "2020 COVID rally and dislocation", start: "2020-02-15", end: "2020-04-30", period: test}
+    - {name: "2020-21 refinancing wave", start: "2020-05-01", end: "2021-02-28", period: test}
+    - {name: "2022 rate shock", start: "2021-12-01", end: "2022-10-31", period: test}
+    - {name: "2023 selloff and reversal", start: "2023-07-01", end: "2023-12-31", period: test}
+    - {name: "2024 rally and reversal", start: "2024-07-01", end: "2024-12-31", period: test}
+    - {name: "2025-26 mortgage-rate rise", start: "2025-11-01", end: null, period: test}
+
+  external:
+    vmbs_enabled: true
+    pmbs_descriptive_enabled: true
+    pdmix_enabled: true            # PIMCO GNMA fund: frozen recipe and exposure comparison (added 2026-11-02, decision 25)
+
+  seed: 20261106
+  # ---------------- END FROZEN BLOCK ----------------
+
+smoke:
+  # Settings that make the synthetic smoke run fast. They never apply to real-data runs.
+  bootstrap_reps: 200
+  q_bootstrap_reps: 100
+  simulation_worlds: 12
+  ewma_halflife_grid_days: [21, 63, 252]
+  synthetic_end_date: "2026-10-30"
+
+simulation:
+  worlds: 60                       # full-pipeline refits per scenario (3 scenarios) in notebook 04 (about 6 minutes)
+  recovery_worlds: 5                # worlds used for the estimator-recovery study
+  q_null_worlds: 20                 # constant-duration worlds used to calibrate the variation test
+  q_null_bootstrap_reps: 200        # bootstrap draws per constant-duration world
+  bootstrap_reps: 300               # bootstrap draws inside each simulated world

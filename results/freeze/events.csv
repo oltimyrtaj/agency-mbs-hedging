@@ -1,0 +1,3 @@
+utc,event,detail
+2026-11-02T12:28:45Z,freeze_replaced,no test evaluation had been logged: the frozen configuration block changed; development choice halflife_selection differs
+2026-11-03T02:34:49Z,freeze_replaced,no test evaluation had been logged: the frozen configuration block changed; result-relevant source code changed; analysis notebook code changed
